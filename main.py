@@ -14,12 +14,12 @@ hero_3 = Hero(name="Rusty-Man", secret_name="Tommy Sharp", age=48)
 
 engine = create_engine("sqlite:///database.db")
 
-# SQLModel.metadata.create_all(engine)
-# with Session(engine) as session:
-#     session.add(hero_1)
-#     session.add(hero_2)
-#     session.add(hero_3)
-#     session.commit()
+SQLModel.metadata.create_all(engine)
+with Session(engine) as session:
+    session.add(hero_1)
+    session.add(hero_2)
+    session.add(hero_3)
+    session.commit()
 
 with Session(engine) as session:
     statement = select(Hero).where(Hero.name == "Spider-Boy")
