@@ -1,27 +1,22 @@
-from sqlmodel import Field, Session, SQLModel, create_engine, select
+from sqlmodel import Field, SQLModel, create_engine
 
 
 class Hero(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str
     secret_name: str
-    age: int | None = Field(default=None)
+    age: int | None = None
 
 
-hero_1 = Hero(name="Deadpond", secret_name="Dive Wilson")
-hero_2 = Hero(name="Spider-Boy", secret_name="Predro Parqueador")
-hero_3 = Hero(name="Rusty-Man", secret_name="Tommy Sharp", age=48)
+sqlite_file_name = "database.db"
+sqlite_url = f"sqlite:///{sqlite_file_name}"
 
-engine = create_engine("sqlite:///database.db")
+engine = create_engine(sqlite_url, echo=True)
 
-SQLModel.metadata.create_all(engine)
-with Session(engine) as session:
-    session.add(hero_1)
-    session.add(hero_2)
-    session.add(hero_3)
-    session.commit()
 
-with Session(engine) as session:
-    statement = select(Hero).where(Hero.name == "Spider-Boy")
-    hero = session.exec(statement).first()
-    print(hero)
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
+
+if __name__ == "__main__":
+    create_db_and_tables()
